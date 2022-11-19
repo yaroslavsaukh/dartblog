@@ -1,0 +1,8 @@
+<div class="newsletter">
+    <h2 class="sidebar-title">Subscribe To oUR NEWS</h2>
+    <form action="{% url 'contact_form' %}" method="post">
+        {% csrf_token %}
+        {{contact_form}}
+       <input type="submit" value="Subscribe">
+    </form>
+</div>

@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load sidebar %}
+{% load contact %}
+{% block title %}{{post.title}}{% endblock %}
+
+{% block content %}
+<section class="single-blog-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="border-top">
+                    <div class="col-md-8">
+                        <div class="blog-area">
+                            <div class="blog-area-part">
+                                <h2>{{post.title}}</h2>
+                                <div class="for-style">
+                                    <div>
+                                        <span>Category:
+                                            <a href="{{post.category.get_absolute_url}}">{{post.category}}</a>
+                                        </span>
+                                    </div>
+                                    {{post.content|safe}}
+
+                                </div>
+                                <img src="{{post.photo.url}}" alt="">
+                                <div>
+                                    <p class="text-md text-muted">Views: {{post.views}}</p>
+                                </div>
+                            </div>
+                            <div class="commententries">
+                                <h3>Comments</h3>
+
+                                <ul class="commentlist">
+                                    {% for comment in comments %}
+                                        <li>
+                                        <article class="comment">
+                                            <header class="comment-author">
+                                                <img src="https://picsum.photos/100" alt="Oooops">
+                                            </header>
+                                            <section class="comment-details">
+                                                <div class="author-name">
+                                                    <h5><a href="#">{{comment.name}}</a></h5>
+                                                    <p>{{comment.created_at|date:'M.Y.d'}}</p>
+                                                </div>
+                                                <div class="comment-body">
+                                                    <p>{{comment.content}}</p>
+                                                </div>
+                                            </section>
+                                        </article>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+
+                            <form action="{% url 'comment_form' post.slug %}" method="post">
+                                {% csrf_token %}
+                                <div class="name">
+                                    <input type="text" name="name" placeholder="Name" class="name">
+                                </div>
+                                <div class="email">
+                                    <input type="email" name="email" placeholder="Email" class="email">
+                                </div>
+                                <div class="comment">
+                                    <input type="text" name="content" placeholder="Comment" class="comment">
+                                </div>
+                                <div class="post">
+                                    <input type="submit" value="Post">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+
+                        {% get_popular_posts 5 %}
+
+                        <div class="tags">
+                            <h2 class="sidebar-title">Tags</h2>
+                            {% if post.tags.exists %}
+                            {% for i in post.tags.all %}
+                            <p><a href="{{i.get_absolute_url}}">{{i.title}}</a></p>
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+
+                        {% contact_form %}
+                        <!--                        <div class="newsletter">-->
+                        <!--                            <h2 class="sidebar-title">Subscribe To oUR nEWSLETTER</h2>-->
+                        <!--                            <form action="#" method="post">-->
+                        <!--                                <input type="email" name="" id="" placeholder="Email">-->
+                        <!--                                <input type="submit" value="Subscribe">-->
+                        <!--                            </form>-->
+                        <!--                        </div>-->
+                        <div class="newsletter">
+                            <h2 class="sidebar-title">Search posts</h2>
+                            <form action="{% url 'search' %}" method="get">
+                                <input type="text" name="s" placeholder="Search....">
+                                <input type="submit" value="Search">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
